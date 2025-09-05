@@ -27,11 +27,13 @@ const masked = (n) => maskCard(n, { showStart: 4, showEnd: 4 });
   margin-top: 1rem;
 }
 .item {
-  border: 1px solid #e5e7eb;
+  border: 1px solid #9ca3af;
   border-radius: 10px;
   padding: 0.75rem 0.9rem;
-  background: #fff;
+  background: transparent;
+  color: #e5e7eb;
 }
+
 .line {
   font-size: 0.95rem;
 }
