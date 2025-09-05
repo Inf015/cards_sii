@@ -5,6 +5,7 @@
         <div class="chip" aria-hidden="true"></div>
         <div class="brand" aria-hidden="true">CARD</div>
       </div>
+
       <div class="card-number">{{ grouped }}</div>
 
       <div class="card-bottom">
@@ -82,29 +83,30 @@ const expiryView = computed(() => normalizeExpiryForView(props.expiry));
   grid-template-rows: auto 1fr auto;
   gap: 16px;
   overflow: hidden;
+  color: #f8fafc;
 }
+
 .card-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.chip {
-  width: 42px;
-  height: 30px;
-  border-radius: 6px;
-  background: linear-gradient(#f4f4f5, #cbd5e1);
-}
+
 .brand {
   font-weight: 700;
   letter-spacing: 0.08em;
-  opacity: 0.85;
+  color: #f8fafc;
+  opacity: 0.9;
 }
+
 .card-number {
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.08em;
   font-size: 1.5rem;
   line-height: 1.15;
   word-spacing: 0.25em;
+  color: #f8fafc;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 
 .card-bottom {
@@ -112,17 +114,23 @@ const expiryView = computed(() => normalizeExpiryForView(props.expiry));
   justify-content: space-between;
   gap: 16px;
 }
+
 .label {
   display: block;
   font-size: 0.65rem;
   letter-spacing: 0.12em;
-  opacity: 0.75;
   margin-bottom: 4px;
+  color: #f8fafc;
+  opacity: 0.85;
 }
+
 .value {
   font-size: 0.95rem;
   font-variant-numeric: tabular-nums;
+  color: #f8fafc;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
 }
+
 .chip {
   width: 48px;
   height: 36px;

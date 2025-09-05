@@ -163,6 +163,24 @@ function onSubmit() {
   if (!errors.number && !errors.expiry && !errors.name && !errors.cvv) {
     emit("submit");
   }
+  function focusFirstError() {
+    if (errors.number) return document.getElementById("cardNumber")?.focus();
+    if (errors.expiry) return document.getElementById("expiry")?.focus();
+    if (errors.name) return document.getElementById("holderName")?.focus();
+    if (errors.cvv) return document.getElementById("cvv")?.focus();
+  }
+
+  function onSubmit() {
+    validateNumber();
+    validateExpiry();
+    validateName();
+    validateCvv();
+    if (!errors.number && !errors.expiry && !errors.name && !errors.cvv) {
+      emit("submit");
+    } else {
+      focusFirstError();
+    }
+  }
 }
 
 function onCancel() {
