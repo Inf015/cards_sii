@@ -60,6 +60,7 @@
         inputmode="numeric"
         autocomplete="cc-csc"
         :value="cvv"
+        @beforeinput="onCvvBeforeInput"
         @input="(e) => updateCvv(e.target.value)"
         @blur="validateCvv"
         maxlength="4"
@@ -232,6 +233,14 @@ button {
 }
 button.ghost {
   background: transparent;
-  color: #111827;
+  color: #e5e7eb;
+  border-color: #e5e7eb;
+}
+button.ghost:hover {
+  background: rgba(229, 231, 235, 0.08);
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 </style>
