@@ -1,3 +1,4 @@
+// src/services/CardRepository.js
 const BASE = "http://localhost:3001";
 
 export async function listCards() {
@@ -15,6 +16,17 @@ export async function createCard(payload) {
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
     throw new Error(err.error || "POST /cards failed");
+  }
+  return res.json();
+}
+
+export async function deleteCard(id) {
+  const res = await fetch(`${BASE}/cards/${encodeURIComponent(id)}`, {
+    method: "DELETE",
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || "DELETE /cards failed");
   }
   return res.json();
 }

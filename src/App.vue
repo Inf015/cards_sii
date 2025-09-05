@@ -4,7 +4,11 @@ import { reactive, ref, onMounted } from "vue";
 import CardForm from "./components/CardForm.vue";
 import CardPreview from "./components/CardPreview.vue";
 import CardList from "./components/CardList.vue";
-import { listCards, createCard } from "./services/CardRepository.js";
+import {
+  listCards,
+  createCard,
+  deleteCard,
+} from "./services/CardRepository.js";
 
 /** Estado único compartido (fuente de la verdad) */
 const form = reactive({
@@ -46,6 +50,16 @@ async function handleSubmit() {
   }
 }
 
+/** Eliminar tarjeta del backend y actualizar lista */
+async function handleDelete(id) {
+  try {
+    await deleteCard(id);
+    cards.value = cards.value.filter((c) => c.id !== id);
+  } catch (e) {
+    console.error("Error eliminando tarjeta:", e);
+  }
+}
+
 /** Cancelar = limpiar formulario */
 function handleCancel() {
   form.number = "";
@@ -77,7 +91,7 @@ function handleCancel() {
         @cancel="handleCancel"
       />
 
-      <CardList :cards="cards" />
+      <CardList :cards="cards" @delete="handleDelete" />
     </section>
   </main>
 </template>

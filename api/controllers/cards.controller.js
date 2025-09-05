@@ -1,8 +1,12 @@
+// api/controllers/cards.controller.js
 import { v4 as uuid } from "uuid";
 import * as Repo from "../repositories/file.repository.js";
 import { validateRequired } from "../validators/cards.schema.js";
+import { fileURLToPath } from "url";
+import path from "path";
 
-const DB_PATH = new URL("../data/cards.json", import.meta.url).pathname;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const DB_PATH = path.resolve(__dirname, "../data/cards.json");
 
 export async function list(_req, res, next) {
   try {
@@ -32,6 +36,22 @@ export async function create(req, res, next) {
     data.push(card);
     await Repo.writeJson(DB_PATH, data);
     res.status(201).json(card);
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function remove(req, res, next) {
+  try {
+    const { id } = req.params;
+    const data = await Repo.readJson(DB_PATH);
+    const idx = data.findIndex((c) => String(c.id) === String(id));
+    if (idx === -1) {
+      return res.status(404).json({ error: "Card not found" });
+    }
+    const [deleted] = data.splice(idx, 1);
+    await Repo.writeJson(DB_PATH, data);
+    res.json({ ok: true, deleted });
   } catch (err) {
     next(err);
   }
