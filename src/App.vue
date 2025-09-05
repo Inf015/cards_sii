@@ -1,9 +1,10 @@
 <!-- src/App.vue -->
 <script setup>
-import { reactive } from "vue";
+import { reactive, ref, onMounted } from "vue";
 import CardForm from "./components/CardForm.vue";
 import CardPreview from "./components/CardPreview.vue";
 import CardList from "./components/CardList.vue";
+import { listCards, createCard } from "./services/CardRepository.js";
 
 /** Estado único compartido (fuente de la verdad) */
 const form = reactive({
@@ -13,30 +14,39 @@ const form = reactive({
   cvv: "",
 });
 
-/** Lista de tarjetas agregadas */
-const cards = reactive([]);
+/** Lista de tarjetas (desde el backend) */
+const cards = ref([]);
 
-/** Agregar tarjeta válida a la lista y limpiar el formulario */
-function handleSubmit() {
-  const id =
-    (crypto?.randomUUID && crypto.randomUUID()) ||
-    String(Date.now()) + Math.random().toString(16).slice(2);
+/** Cargar tarjetas al montar el componente */
+onMounted(async () => {
+  try {
+    cards.value = await listCards();
+  } catch (e) {
+    console.error("Error cargando tarjetas:", e);
+  }
+});
 
-  cards.push({
-    id,
-    number: form.number,
-    expiry: form.expiry,
-    name: form.name,
-  });
+/** Enviar tarjeta al backend y actualizar lista */
+async function handleSubmit() {
+  try {
+    const saved = await createCard({
+      number: form.number,
+      expiry: form.expiry,
+      name: form.name,
+    });
+    cards.value = [...cards.value, saved];
 
-  // limpiar form
-  form.number = "";
-  form.expiry = "";
-  form.name = "";
-  form.cvv = "";
+    // limpiar form
+    form.number = "";
+    form.expiry = "";
+    form.name = "";
+    form.cvv = "";
+  } catch (e) {
+    console.error("Error guardando tarjeta:", e);
+  }
 }
 
-/** Cancelar = limpiar formulario (opcional manejar otras cosas) */
+/** Cancelar = limpiar formulario */
 function handleCancel() {
   form.number = "";
   form.expiry = "";
