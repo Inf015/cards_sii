@@ -39,7 +39,7 @@ export function groupCard(number) {
 }
 
 // enmascara tarjeta (para lista final)
-export function maskCard(number, { showStart = 4, showEnd = 4 } = {}) {
+export function maskCard(number, { showStart = 2, showEnd = 4 } = {}) {
   const d = onlyDigits(number);
   if (d.length <= showStart + showEnd) return d;
   const start = d.slice(0, showStart);
