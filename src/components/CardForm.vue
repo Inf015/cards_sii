@@ -8,9 +8,10 @@
         inputmode="numeric"
         autocomplete="cc-number"
         :value="number"
+        @beforeinput="onNameBeforeInput"
         @input="(e) => updateNumber(e.target.value)"
         @blur="validateNumber"
-        maxlength="19"
+        maxlength="16"
         :aria-invalid="!!errors.number"
         placeholder="1234567812345678"
       />
@@ -171,6 +172,21 @@ function onCancel() {
   errors.number = errors.expiry = errors.name = errors.cvv = "";
   emit("cancel");
 }
+
+function onNumberBeforeInput(e) {
+  // Bloquea cualquier carácter no numérico al teclear
+  if (e.data && /\D/.test(e.data)) {
+    e.preventDefault();
+    return;
+  }
+
+  // Si es pegado, sanitiza y reemplaza tú mismo
+  if (e.inputType === "insertFromPaste") {
+    const text = (e.clipboardData?.getData("text") ?? "").replace(/\D+/g, "");
+    e.preventDefault();
+    updateNumber(text); // aplica también el tope de 16
+  }
+}
 </script>
 
 <style scoped>
@@ -194,8 +210,9 @@ input {
 }
 input[aria-invalid="true"] {
   border-color: #d92d20;
-  background: #fff1f0;
+  box-shadow: 0 0 0 3px rgba(217, 45, 32, 0.18);
 }
+
 .error {
   color: #d92d20;
   font-size: 0.85rem;
